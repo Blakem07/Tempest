@@ -20,6 +20,7 @@ $pageTitle = $pageTitle ?? 'Tempest - Construction Project Cloud Dashboard';
 
             <nav aria-label="Main navigation">
                 <a href="/">Dashboard</a>
+                <a href="/project.php">Projects</a>
                 <a href="/about.php">About</a>
             </nav>
         </div>

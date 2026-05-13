@@ -5,3 +5,4 @@
 /node_modules
 .idea
 .vscode
+public/db-test.php
