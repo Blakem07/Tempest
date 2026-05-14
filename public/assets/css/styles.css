@@ -232,26 +232,98 @@ th {
   font-size: 0.95rem;
 }
 
-
 /* -----------------------------
    Map
 -------------------------- */
 
 .map-panel {
-    width: 100%;
-    min-height: 420px;
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-    overflow: hidden;
-    background: var(--accent-soft);
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--accent-soft);
 }
 
 .map-fallback {
-    margin-top: 1rem;
-    padding: 1rem;
-    border: 1px solid #e5b8b8;
-    border-radius: 0.75rem;
-    background: #fff1f1;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #e5b8b8;
+  border-radius: 0.75rem;
+  background: #fff1f1;
+}
+
+/* -----------------------------
+   Weather
+-------------------------- */
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.metric-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.metric strong {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.metric small {
+  display: block;
+  color: var(--muted);
+}
+
+.risk-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.risk-card h4 {
+  margin: 0.25rem 0;
+}
+
+.risk-low {
+  background: #eef9f0;
+  border-color: #b8ddb9;
+}
+
+.risk-medium {
+  background: #fff8e5;
+  border-color: #efd58a;
+}
+
+.risk-high {
+  background: #fff1f1;
+  border-color: #e5b8b8;
+}
+
+@media (max-width: 900px) {
+  .weather-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .weather-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* -----------------------------

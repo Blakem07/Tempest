@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../src/services/ProjectService.php';
 require_once __DIR__ . '/../src/helpers/escape.php';
+require_once __DIR__ . '/../src/services/WeatherService.php';
+require_once __DIR__ . '/../src/services/WeatherRiskService.php';
 
 $pageTitle = 'Projects | Tempest';
 
@@ -9,6 +11,10 @@ $errorMessage = '';
 $projects = [];
 $selectedProject = null;
 $resources = [];
+
+$weather = null;
+$weatherRisk = null;
+$weatherErrorMessage = '';
 
 // Load project data and optional selected project details.
 try {
@@ -25,6 +31,17 @@ try {
             $errorMessage = 'Project not found.';
         } else {
             $resources = getProjectResources($projectId);
+
+            try {
+                $weather = getCurrentWeather(
+                    (float) $selectedProject['latitude'],
+                    (float) $selectedProject['longitude']
+                );
+
+                $weatherRisk = assessWeatherRisk($weather, $resources);
+            } catch (Throwable $exception) {
+                $weatherErrorMessage = 'Current weather data is currently unavailable.';
+            }
         }
     }
 } catch (Throwable $exception) {
@@ -144,6 +161,52 @@ if ($selectedProject !== null): ?>
             <?= e((string) $selectedProject['latitude']) ?>,
             <?= e((string) $selectedProject['longitude']) ?>.
         </p>
+    </section>
+
+    <section class="card">
+        <p class="eyebrow">Current weather</p>
+        <h3>Weather risk assessment</h3>
+
+        <?php if ($weatherErrorMessage !== ''): ?>
+            <div class="notice error">
+                <p><?= e($weatherErrorMessage) ?></p>
+            </div>
+        <?php elseif ($weather !== null && $weatherRisk !== null): ?>
+            <div class="weather-grid">
+                <div class="metric">
+                    <span class="metric-label">Temperature</span>
+                    <strong><?= e(number_format((float) $weather['temperature_celsius'], 1)) ?>°C</strong>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">Wind speed</span>
+                    <strong><?= e(number_format((float) $weather['wind_mph'], 1)) ?>mph</strong>
+                    <small><?= e(number_format((float) $weather['wind_metres_per_second'], 1)) ?>m/s</small>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">Condition</span>
+                    <strong><?= e(ucfirst($weather['weather_description'])) ?></strong>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">Humidity</span>
+                    <strong><?= e((string) $weather['humidity']) ?>%</strong>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">Timestamp</span>
+                    <strong><?= e($weather['timestamp']) ?></strong>
+                </div>
+            </div>
+
+            <div class="risk-card risk-<?= e(strtolower($weatherRisk['level'])) ?>">
+                <p class="eyebrow">Recommendation</p>
+                <h4><?= e($weatherRisk['level']) ?> weather risk</h4>
+                <p><?= e($weatherRisk['message']) ?></p>
+                <p><strong>Evidence:</strong> <?= e($weatherRisk['evidence']) ?></p>
+            </div>
+        <?php endif; ?>
     </section>
 <?php endif; ?>
 
