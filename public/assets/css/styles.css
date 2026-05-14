@@ -232,6 +232,28 @@ th {
   font-size: 0.95rem;
 }
 
+
+/* -----------------------------
+   Map
+-------------------------- */
+
+.map-panel {
+    width: 100%;
+    min-height: 420px;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--accent-soft);
+}
+
+.map-fallback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #e5b8b8;
+    border-radius: 0.75rem;
+    background: #fff1f1;
+}
+
 /* -----------------------------
    Small screens
 -------------------------- */

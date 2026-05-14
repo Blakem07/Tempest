@@ -9,6 +9,7 @@ $pageTitle = $pageTitle ?? 'Tempest - Construction Project Cloud Dashboard';
     <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Azure-hosted construction project dashboard for project location, weather and air-quality risk monitoring.">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 

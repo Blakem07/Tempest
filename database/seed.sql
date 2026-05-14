@@ -9,8 +9,8 @@ VALUES
     'Central Bridge Demolition',
     'Demolition and clearance of an ageing road bridge before replacement works begin.',
     'Newcastle upon Tyne',
-    54.9783000,
-    -1.6178000,
+    54.9738000,
+    -1.6131000,
     '2026-05-01',
     '2026-08-15'
 ),
@@ -18,8 +18,8 @@ VALUES
     'Riverside Apartment Build',
     'Construction of a medium-rise residential apartment block near the riverside.',
     'Gateshead',
-    54.9626000,
-    -1.6015000,
+    54.9670000, 
+    -1.6015000, 
     '2026-06-03',
     '2027-02-28'
 ),

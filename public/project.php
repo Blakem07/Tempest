@@ -37,7 +37,7 @@ require_once __DIR__ . '/../src/views/header.php';
 <section class="hero">
     <p class="eyebrow">Project dashboard</p>
     <h2>Construction project data</h2>
-    <p>Select a project to view its description, location and allocated equipment resources from the cloud database.</p>
+    <p>Select a project to view its description, location, allocated equipment resources and project map.</p>
 </section>
 
 <section class="card">
@@ -56,7 +56,6 @@ require_once __DIR__ . '/../src/views/header.php';
         <button type="submit">View project</button>
     </form>
 </section>
-
 
 <?php
 // Display an error message when project data cannot be loaded.
@@ -120,6 +119,31 @@ if ($selectedProject !== null): ?>
                 </table>
             <?php endif; ?>
         </article>
+    </section>
+
+    <?php
+    // Display selected project map using latitude and longitude from the cloud database.
+    ?>
+    <section class="card">
+        <p class="eyebrow">Project location</p>
+        <h3>Site map</h3>
+        <p>The map marker uses latitude and longitude retrieved from the cloud database.</p>
+
+        <div
+            id="projectMap"
+            class="map-panel"
+            data-latitude="<?= e((string) $selectedProject['latitude']) ?>"
+            data-longitude="<?= e((string) $selectedProject['longitude']) ?>"
+            data-title="<?= e($selectedProject['title']) ?>"
+            data-location="<?= e($selectedProject['location_name']) ?>"
+            aria-label="Map showing selected construction project location">
+        </div>
+
+        <p id="mapFallback" class="map-fallback" hidden>
+            Map could not be loaded. Project coordinates:
+            <?= e((string) $selectedProject['latitude']) ?>,
+            <?= e((string) $selectedProject['longitude']) ?>.
+        </p>
     </section>
 <?php endif; ?>
 
