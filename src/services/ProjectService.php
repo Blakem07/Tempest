@@ -20,7 +20,7 @@ function getProjectById(int $projectId): ?array
     $pdo = databaseConnection();
 
     $statement = $pdo->prepare(
-        'SELECT id, title, description, location_name, latitude, longitude, start_date, end_date
+        'SELECT id, title, description, manager, location_name, latitude, longitude
          FROM projects
          WHERE id = :id
          LIMIT 1'
@@ -40,7 +40,7 @@ function getProjectResources(int $projectId): array
     $pdo = databaseConnection();
 
     $statement = $pdo->prepare(
-        'SELECT r.name, r.resource_type, pr.quantity
+        'SELECT DISTINCT r.id, r.name, r.resource_type, r.conditions_of_use
          FROM project_resources pr
          INNER JOIN resources r ON r.id = pr.resource_id
          WHERE pr.project_id = :project_id

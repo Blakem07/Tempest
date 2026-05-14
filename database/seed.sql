@@ -1,61 +1,105 @@
--- Tempest Phase 2 seed data
--- Sample project and equipment records for development and testing.
-
--- Insert sample construction projects with location coordinates.
 INSERT INTO projects
-(title, description, location_name, latitude, longitude, start_date, end_date)
+(id, title, description, manager, location_name, latitude, longitude)
 VALUES
 (
-    'Central Bridge Demolition',
-    'Demolition and clearance of an ageing road bridge before replacement works begin.',
-    'Newcastle upon Tyne',
-    54.9738000,
-    -1.6131000,
-    '2026-05-01',
-    '2026-08-15'
+    1,
+    'NESST',
+    'A new university building with lab spaces, meeting rooms, breakout areas, kitchen areas and WC facilities.',
+    'Chelsea Dawson',
+    'Northumbria University, Ellison Terrace, Newcastle upon Tyne, NE1 8ST',
+    54.97641468,
+    -1.60663669
 ),
 (
-    'Riverside Apartment Build',
-    'Construction of a medium-rise residential apartment block near the riverside.',
-    'Gateshead',
-    54.9670000, 
-    -1.6015000, 
-    '2026-06-03',
-    '2027-02-28'
+    2,
+    'CHASE',
+    'A new university building with lab spaces, meeting rooms, breakout areas, kitchen areas and WC facilities.',
+    'Peter Duncan',
+    'Northumbria University, Ellison Terrace, Newcastle upon Tyne, NE1 8ST',
+    54.97919158,
+    -1.60648639
 ),
 (
-    'South Yard Groundworks',
-    'Groundworks, excavation and site preparation for an industrial storage facility.',
-    'Sunderland',
-    54.9069000,
-    -1.3838000,
-    '2026-04-20',
-    '2026-07-30'
+    3,
+    'HMRC',
+    'An office space for a public sector client to include gym space, staff rooms with kitchen areas, toilet facilities, meeting rooms and breakout areas.',
+    'Dan Smith',
+    'New Bridge Street, Newcastle upon Tyne, NE1 2SW',
+    54.97419180,
+    -1.61130369
+),
+(
+    4,
+    'St James Park',
+    'An extension to the existing football stadium to include a clubhouse for coaching non-professional players and hosting events. To include a small field, an exhibition room, toilet facilities and a kitchen.',
+    'Chelsea Dawson',
+    'Newcastle United Football Co Ltd, St. James Park, Strawberry Place, Newcastle upon Tyne, NE1 4ST',
+    54.97470900,
+    -1.62047673
 );
 
--- Insert equipment resources used for risk recommendation logic.
 INSERT INTO resources
-(name, resource_type)
+(id, name, resource_type, conditions_of_use)
 VALUES
-('Crane', 'Lifting equipment'),
-('Digger', 'Earth-moving equipment'),
-('Dumper truck', 'Earth-moving equipment'),
-('Concrete mixer', 'Concrete equipment'),
-('Scaffolding', 'Access equipment'),
-('Generator', 'Power equipment');
+(
+    1,
+    'Crane',
+    'Lifting equipment',
+    'Do not use in high wind'
+),
+(
+    2,
+    'Drill',
+    'Drilling equipment',
+    'Do not use in heavy rain'
+),
+(
+    3,
+    'Dumper Truck',
+    'Earth-moving equipment',
+    'Do not use in heavy rain. Has CO2 emissions so do not use if air quality CO, PM10, PM2.5 or NO2 readings are moderate or poorer.'
+),
+(
+    4,
+    'Digger',
+    'Earth-moving equipment',
+    'Do not use in heavy rain. Has CO2 emissions so do not use if air quality CO, PM10, PM2.5 or NO2 readings are moderate or poorer.'
+),
+(
+    5,
+    'Loader',
+    'Earth-moving equipment',
+    'Do not use in heavy rain. Has CO2 emissions so do not use if air quality CO, PM10, PM2.5 or NO2 readings are moderate or poorer.'
+),
+(
+    6,
+    'Concrete mixer',
+    'Concrete equipment',
+    'Do not use in heavy rain'
+);
 
--- Assign equipment resources to projects with quantities.
 INSERT INTO project_resources
-(project_id, resource_id, quantity)
+(project_id, resource_id)
 VALUES
-(1, 1, 1),
-(1, 2, 2),
-(1, 3, 2),
-(1, 6, 1),
-(2, 1, 1),
-(2, 4, 2),
-(2, 5, 1),
-(2, 6, 1),
-(3, 2, 3),
-(3, 3, 4),
-(3, 6, 2);
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 4),
+(2, 5),
+
+(3, 1),
+(3, 3),
+(3, 4),
+(3, 5),
+(3, 6),
+
+(4, 1),
+(4, 3),
+(4, 5),
+(4, 6);

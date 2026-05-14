@@ -14,6 +14,7 @@ function assessWeatherRisk(array $weather, array $resources): array
     $hasCrane = in_array('crane', $resourceNames, true);
     $hasDigger = in_array('digger', $resourceNames, true);
     $hasDumperTruck = in_array('dumper truck', $resourceNames, true);
+    $hasLoader = in_array('loader', $resourceNames, true);
 
     $windMph = (float) ($weather['wind_mph'] ?? 0);
     $weatherDescription = trim(strtolower((string) ($weather['weather_description'] ?? '')));
@@ -34,16 +35,15 @@ function assessWeatherRisk(array $weather, array $resources): array
         ];
     }
 
-    // Heavy rain affects projects using both diggers and dumper trucks.
+    // Heavy rain affects projects using earth-moving equipment.
     if (
-        $hasDigger
-        && $hasDumperTruck
-        && in_array($weatherDescription, $highRiskRainDescriptions, true)
+        in_array($weatherDescription, $highRiskRainDescriptions, true)
+        && ($hasDigger || $hasDumperTruck || $hasLoader)
     ) {
         return [
             'level' => 'High',
-            'message' => 'Works may be delayed because heavy rainfall affects digger and dumper truck operations.',
-            'evidence' => 'Weather condition: ' . $weatherDescription . '. Resources: Digger and Dumper truck.',
+            'message' => 'Works may be delayed because heavy rainfall affects earth-moving equipment operations.',
+            'evidence' => 'Weather condition: ' . $weatherDescription . '. Affected resources include diggers, dumper trucks or loaders.',
         ];
     }
 

@@ -147,21 +147,20 @@ Planned project fields:
 
 - Project title
 - Project description
+- Manager
 - Location name
 - Latitude
 - Longitude
-- Start date
-- End date
-- Allocated equipment
+- Allocated resources
 
-Planned equipment examples:
+Planned resources examples:
 
 - Crane
 - Digger
 - Dumper truck
 - Concrete mixer
 - Scaffolding
-- Generator
+- Loader
 
 ## Security Controls
 

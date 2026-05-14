@@ -92,6 +92,9 @@ if ($selectedProject !== null): ?>
             <p><?= e($selectedProject['description']) ?></p>
 
             <dl class="details-list">
+                <dt>Project manager</dt>
+                <dd><?= e($selectedProject['manager']) ?></dd>
+
                 <dt>Location</dt>
                 <dd><?= e($selectedProject['location_name']) ?></dd>
 
@@ -100,12 +103,6 @@ if ($selectedProject !== null): ?>
 
                 <dt>Longitude</dt>
                 <dd><?= e((string) $selectedProject['longitude']) ?></dd>
-
-                <dt>Start date</dt>
-                <dd><?= e($selectedProject['start_date']) ?></dd>
-
-                <dt>End date</dt>
-                <dd><?= e($selectedProject['end_date']) ?></dd>
             </dl>
         </article>
 
@@ -121,7 +118,7 @@ if ($selectedProject !== null): ?>
                         <tr>
                             <th>Resource</th>
                             <th>Type</th>
-                            <th>Quantity</th>
+                            <th>Conditions of use</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,7 +126,7 @@ if ($selectedProject !== null): ?>
                             <tr>
                                 <td><?= e($resource['name']) ?></td>
                                 <td><?= e($resource['resource_type']) ?></td>
-                                <td><?= e((string) $resource['quantity']) ?></td>
+                                <td><?= e($resource['conditions_of_use']) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
