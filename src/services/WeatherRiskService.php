@@ -3,6 +3,24 @@
 // Conservative application threshold informed by CPA crane wind guidance.
 const CRANE_WIND_RISK_THRESHOLD_MPH = 20;
 
+/**
+ * Assess weather-related construction risk for a selected project.
+ *
+ * Compares current OpenWeather data against the equipment allocated to the
+ * selected project. The function returns a structured recommendation used by
+ * the dashboard to display the risk level, user-facing message and supporting
+ * evidence.
+ *
+ * Implemented rules:
+ * - If wind speed is greater than 20mph and the project includes a crane,
+ *   crane works should not be carried out.
+ * - If heavy rain is reported and the project includes earth-moving equipment,
+ *   works may be delayed.
+ *
+ * @param array $weather Current weather data normalised by WeatherService.
+ * @param array $resources Resource records allocated to the selected project.
+ * @return array Risk summary.
+ */
 function assessWeatherRisk(array $weather, array $resources): array
 {
     // Normalise resource names so matching is case-insensitive.

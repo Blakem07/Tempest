@@ -2,6 +2,15 @@
 
 require_once __DIR__ . '/../config/env.php';
 
+/**
+ * Fetch current weather from OpenWeather for the given coordinates.
+ *
+ * @param float $latitude Project latitude.
+ * @param float $longitude Project longitude.
+ * @return array Normalised weather data used by the application.
+ * @throws RuntimeException If the API key is missing, the request fails,
+ *                          or the service returns invalid data.
+ */
 function getCurrentWeather(float $latitude, float $longitude): array
 {
     $apiKey = envValue('OPENWEATHER_API_KEY');
@@ -46,7 +55,10 @@ function getCurrentWeather(float $latitude, float $longitude): array
 }
 
 /**
- * Converts raw OpenWeather response data into the fields used by the app.
+ * Convert raw OpenWeather response data into the fields used by the app.
+ *
+ * @param array $data Raw OpenWeather response data.
+ * @return array Normalised weather data.
  */
 function normaliseWeatherData(array $data): array
 {
