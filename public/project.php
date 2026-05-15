@@ -200,8 +200,17 @@ if ($selectedProject !== null): ?>
             <div class="risk-card risk-<?= e(strtolower($weatherRisk['level'])) ?>">
                 <p class="eyebrow">Recommendation</p>
                 <h4><?= e($weatherRisk['level']) ?> weather risk</h4>
-                <p><?= e($weatherRisk['message']) ?></p>
-                <p><strong>Evidence:</strong> <?= e($weatherRisk['evidence']) ?></p>
+
+                <?php foreach ($weatherRisk['messages'] as $message): ?>
+                    <p><?= e($message) ?></p>
+                <?php endforeach; ?>
+
+                <p><strong>Evidence:</strong></p>
+                <ul>
+                    <?php foreach ($weatherRisk['evidence'] as $evidenceItem): ?>
+                        <li><?= e($evidenceItem) ?></li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         <?php endif; ?>
     </section>

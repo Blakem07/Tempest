@@ -6,24 +6,23 @@ const CRANE_WIND_RISK_THRESHOLD_MPH = 20;
 /**
  * Assess weather-related construction risk for a selected project.
  *
- * Compares current OpenWeather data against the equipment allocated to the
- * selected project. The function returns a structured recommendation used by
- * the dashboard to display the risk level, user-facing message and supporting
- * evidence.
+ * Evaluates every weather rule before returning so multiple warnings can be
+ * shown at the same time. This prevents one triggered rule from hiding another
+ * triggered rule.
  *
- * Implemented rules:
+ * Implemented assessment rules:
  * - If wind speed is greater than 20mph and the project includes a crane,
- *   crane works should not be carried out.
- * - If heavy rain is reported and the project includes earth-moving equipment,
- *   works may be delayed.
+ *   crane work should not be carried out.
+ * - If weather description is heavy intensity rain, very heavy rain or extreme
+ *   rain, and the project includes both Digger and Dumper Truck, works may be
+ *   delayed due to rainfall.
  *
  * @param array $weather Current weather data normalised by WeatherService.
  * @param array $resources Resource records allocated to the selected project.
- * @return array Risk summary.
+ * @return array Risk Summary
  */
 function assessWeatherRisk(array $weather, array $resources): array
 {
-    // Normalise resource names so matching is case-insensitive.
     $resourceNames = array_map(
         fn(array $resource): string => trim(strtolower((string) ($resource['name'] ?? ''))),
         $resources
@@ -32,7 +31,6 @@ function assessWeatherRisk(array $weather, array $resources): array
     $hasCrane = in_array('crane', $resourceNames, true);
     $hasDigger = in_array('digger', $resourceNames, true);
     $hasDumperTruck = in_array('dumper truck', $resourceNames, true);
-    $hasLoader = in_array('loader', $resourceNames, true);
 
     $windMph = (float) ($weather['wind_mph'] ?? 0);
     $weatherDescription = trim(strtolower((string) ($weather['weather_description'] ?? '')));
@@ -41,33 +39,48 @@ function assessWeatherRisk(array $weather, array $resources): array
         'heavy intensity rain',
         'very heavy rain',
         'extreme rain',
-        'heavy rain',
     ];
 
+    $messages = [];
+    $evidence = [];
+
     if ($hasCrane && $windMph > CRANE_WIND_RISK_THRESHOLD_MPH) {
-        return [
-            'level' => 'High',
-            'message' => 'Crane works should not be carried out because wind speed exceeds '
-                . CRANE_WIND_RISK_THRESHOLD_MPH . 'mph.',
-            'evidence' => 'Wind speed: ' . number_format($windMph, 1) . 'mph. Resource: Crane.',
-        ];
+        $messages[] = 'Crane works should not be carried out because wind speed exceeds '
+            . CRANE_WIND_RISK_THRESHOLD_MPH . 'mph.';
+
+        $evidence[] = 'Wind speed: ' . number_format($windMph, 1) . 'mph. Resource: Crane.';
     }
 
-    // Heavy rain affects projects using earth-moving equipment.
     if (
         in_array($weatherDescription, $highRiskRainDescriptions, true)
-        && ($hasDigger || $hasDumperTruck || $hasLoader)
+        && $hasDigger
+        && $hasDumperTruck
     ) {
+        $messages[] = 'Works may be delayed due to rainfall because the project includes both digger and dumper truck operations.';
+
+        $evidence[] = 'Weather condition: ' . $weatherDescription
+            . '. Resources: Digger and Dumper Truck.';
+    }
+
+    if (count($messages) > 0) {
         return [
             'level' => 'High',
-            'message' => 'Works may be delayed because heavy rainfall affects earth-moving equipment operations.',
-            'evidence' => 'Weather condition: ' . $weatherDescription . '. Affected resources include diggers, dumper trucks or loaders.',
+            'messages' => $messages,
+            'evidence' => $evidence,
+            'message' => implode(' ', $messages),
+            'evidence_text' => implode(' ', $evidence),
         ];
     }
 
     return [
         'level' => 'Low',
+        'messages' => [
+            'No weather restriction is currently triggered for the selected project resources.',
+        ],
+        'evidence' => [
+            'No configured crane wind or heavy-rain digger and dumper truck rule was triggered.',
+        ],
         'message' => 'No weather restriction is currently triggered for the selected project resources.',
-        'evidence' => 'No configured wind or heavy-rain resource rule was triggered.',
+        'evidence_text' => 'No configured crane wind or heavy-rain digger and dumper truck rule was triggered.',
     ];
 }
