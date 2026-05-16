@@ -4,6 +4,8 @@ require_once __DIR__ . '/../src/services/ProjectService.php';
 require_once __DIR__ . '/../src/helpers/escape.php';
 require_once __DIR__ . '/../src/services/WeatherService.php';
 require_once __DIR__ . '/../src/services/WeatherRiskService.php';
+require_once __DIR__ . '/../src/services/AirQualityService.php';
+require_once __DIR__ . '/../src/services/AirQualityRiskService.php';
 
 $pageTitle = 'Projects | Tempest';
 
@@ -15,6 +17,10 @@ $resources = [];
 $weather = null;
 $weatherRisk = null;
 $weatherErrorMessage = '';
+
+$airQuality = null;
+$airQualityRisk = null;
+$airQualityErrorMessage = '';
 
 // Load project data and optional selected project details.
 try {
@@ -41,6 +47,17 @@ try {
                 $weatherRisk = assessWeatherRisk($weather, $resources);
             } catch (Throwable $exception) {
                 $weatherErrorMessage = 'Current weather data is currently unavailable.';
+            }
+
+            try {
+                $airQuality = getCurrentAirQuality(
+                    (float) $selectedProject['latitude'],
+                    (float) $selectedProject['longitude']
+                );
+
+                $airQualityRisk = assessAirQualityRisk($airQuality, $resources);
+            } catch (Throwable $exception) {
+                $airQualityErrorMessage = 'Current air-quality data is currently unavailable.';
             }
         }
     }
@@ -208,6 +225,74 @@ if ($selectedProject !== null): ?>
                 <p><strong>Evidence:</strong></p>
                 <ul>
                     <?php foreach ($weatherRisk['evidence'] as $evidenceItem): ?>
+                        <li><?= e($evidenceItem) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+    </section>
+
+    <section class="card">
+        <p class="eyebrow">Current air quality</p>
+        <h3>Air-quality risk assessment</h3>
+
+        <?php if ($airQualityErrorMessage !== ''): ?>
+            <div class="notice error">
+                <p><?= e($airQualityErrorMessage) ?></p>
+            </div>
+        <?php elseif ($airQuality !== null && $airQualityRisk !== null): ?>
+            <div class="weather-grid">
+                <div class="metric">
+                    <span class="metric-label">AQI</span>
+                    <strong><?= e((string) $airQuality['aqi']) ?></strong>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">AQI label</span>
+                    <strong><?= e($airQuality['aqi_label']) ?></strong>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">PM2.5</span>
+                    <strong><?= e(number_format((float) ($airQuality['components']['pm2_5'] ?? 0), 2)) ?></strong>
+                    <small>μg/m³</small>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">PM10</span>
+                    <strong><?= e(number_format((float) ($airQuality['components']['pm10'] ?? 0), 2)) ?></strong>
+                    <small>μg/m³</small>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">NO₂</span>
+                    <strong><?= e(number_format((float) ($airQuality['components']['no2'] ?? 0), 2)) ?></strong>
+                    <small>μg/m³</small>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">CO</span>
+                    <strong><?= e(number_format((float) ($airQuality['components']['co'] ?? 0), 2)) ?></strong>
+                    <small>μg/m³</small>
+                </div>
+
+                <div class="metric">
+                    <span class="metric-label">Timestamp</span>
+                    <strong><?= e($airQuality['timestamp']) ?></strong>
+                </div>
+            </div>
+
+            <div class="risk-card risk-<?= e(strtolower($airQualityRisk['level'])) ?>">
+                <p class="eyebrow">Recommendation</p>
+                <h4><?= e($airQualityRisk['level']) ?> air-quality risk</h4>
+
+                <?php foreach ($airQualityRisk['messages'] as $message): ?>
+                    <p><?= e($message) ?></p>
+                <?php endforeach; ?>
+
+                <p><strong>Evidence:</strong></p>
+                <ul>
+                    <?php foreach ($airQualityRisk['evidence'] as $evidenceItem): ?>
                         <li><?= e($evidenceItem) ?></li>
                     <?php endforeach; ?>
                 </ul>
