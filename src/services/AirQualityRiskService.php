@@ -55,7 +55,7 @@ function assessAirQualityRisk(array $airQuality, array $resources): array
             return airQualityRiskResult(
                 'High',
                 'Work involving earth-moving equipment should not be carried out because the current air-quality rating is ' . $aqiLabel . '.',
-                'AQI: ' . $aqi . ' (' . $aqiLabel . '). Affected resources: ' . implode(', ', array_map('ucwords', $affectedResources)) . '.'
+                'AQI: ' . $aqi . ' (' . $aqiLabel . ') Affected resources: ' . implode(', ', array_map('ucwords', $affectedResources)) . '.'
             );
         }
 
