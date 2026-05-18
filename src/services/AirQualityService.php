@@ -49,6 +49,25 @@ function getCurrentAirQuality(float $latitude, float $longitude): array
         throw new RuntimeException('Air-quality service returned invalid data.');
     }
 
+    return normaliseAirQualityData($data);
+}
+
+/**
+ * Convert an OpenWeather Air Pollution API response into application fields.
+ *
+ * Works for current air quality and historical air quality responses because
+ * both return readings under the list field.
+ *
+ * @param array $data Raw OpenWeather air-pollution response.
+ * @return array{
+ *     aqi: int,
+ *     aqi_label: string,
+ *     components: array<string, float>,
+ *     timestamp: string
+ * }
+ */
+function normaliseAirQualityData(array $data): array
+{
     $reading = $data['list'][0] ?? null;
 
     if (!is_array($reading)) {
