@@ -6,3 +6,4 @@
 .idea
 .vscode
 public/db-test.php
+IaC/*.local.json
