@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "description": "Development parameters for the Tempest Azure infrastructure."
+  },
+  "parameters": {
+    "location": {
+      "value": "swedencentral"
+    },
+    "projectName": {
+      "value": "tempest-dev"
+    },
+    "adminUsername": {
+      "value": "azureuser"
+    },
+    "sshPublicKey": {
+      "value": "PASTE_PUBLIC_SSH_KEY_HERE"
+    },
+    "trustedSshSourceIp": {
+      "value": "PASTE_TRUSTED_PUBLIC_IP_HERE/32"
+    },
+    "vmSize": {
+      "value": "Standard_B2s_v2"
+    },
+    "applyResourceLock": {
+      "value": true
+    }
+  }
+}
