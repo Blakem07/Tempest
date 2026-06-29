@@ -8,6 +8,10 @@ The application combines construction project records, allocated equipment resou
 
 Tempest is deployed on an Azure Ubuntu virtual machine running Apache and PHP. Project and equipment data is stored in an Azure-hosted MySQL database. Weather and air-quality data is requested server-side from OpenWeather APIs.
 
+## Architecture
+
+<img src="./docs/architecture.png" alt="Tempest architecture diagram" width="600" />
+
 ## Phases
 
 Tempest was built in nine phases:
@@ -22,25 +26,14 @@ Tempest was built in nine phases:
 - **Phase 8:** Hardened security through secret handling, validation, escaping, prepared statements, NSG rules, database firewall, resource lock and read-only access evidence.
 - **Phase 9:** Finalised the README, About page, architecture diagram, evidence screenshots, demo video and ZIP package.
 
-## Live Solution
+## Solution
 
 ```text
-Live demo: http://20.91.216.73/
+Narrated demo: https://www.youtube.com/watch?v=iDxd3bfApVc
 Repository: https://github.com/Blakem07/Tempest
 Architecture diagram: docs/architecture.png
 Evidence folder: docs/
 Infrastructure as Code: IaC/
-```
-
-## Submitted Contents
-
-```text
-public/          Website public files
-src/             PHP application code and service files
-IaC/             Azure Bicep infrastructure files
-docs/            Architecture diagram and supporting screenshots
-.env.example     Example environment configuration with placeholder values
-README.md        Project README
 ```
 
 ## Features
